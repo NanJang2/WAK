@@ -7,47 +7,103 @@ public class player_controller : MonoBehaviour
 
     public float moveSpeed;
     public bool InputDisabled = false;
-
-
+    public DialougeManager dmanager;
+    
     private Animator anim;
+    private Vector3 direction;
+    private Rigidbody2D rb2d;
 
-    bool playerMoving;
-    Vector2 lastMove;
+    private bool playerMoving;
+    private Vector2 lastMove;
+    private GameObject scanObject;
     void Start()
     {
         anim = GetComponent<Animator>();
+        rb2d = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(!InputDisabled)
+        //scan obj
+        if(Input.GetButtonDown("Jump") && scanObject != null)
+        {
+            if (scanObject.tag != "NPC")
+            {
+                dmanager.Action(scanObject);
+                
+            }
+            else if (scanObject.tag == "NPC")
+            {
+                if(!dmanager.isAction)
+                {
+                    //대화창이 안 떠 있을 경우
+                    //해당 npc의 다이얼로그를 큐에 탑재
+                    scanObject.GetComponent<DialougeTrigger>().TriggerDialouge();
+                }
+                else if(dmanager.isAction)
+                {
+                    dmanager.DisplayNextSentence();
+                }
+            }   
+        }
+
+        
+    }
+
+    private void FixedUpdate()
+    {
+        if (!InputDisabled  && !dmanager.isAction )
         {
             Moving();
+
+            //Debug.DrawRay(rb2d.position, direction * 0.7f, new Color(0, 1, 0));
+
         }
-        
+        RaycastHit2D rayHit = Physics2D.Raycast(rb2d.position, direction, 0.7f, LayerMask.GetMask("Object"));
+        if (rayHit.collider != null)
+        {
+            scanObject = rayHit.collider.gameObject;
+        }
+        else
+        {
+            scanObject = null;
+        }
     }
 
     void Moving()
     {
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
         playerMoving = false;
-        if (Input.GetAxisRaw("Horizontal") > 0f || Input.GetAxisRaw("Horizontal") < 0f)
+        if (h > 0f || h < 0f)
         {
-            transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * moveSpeed * Time.deltaTime, 0f, 0f));
+            transform.Translate(new Vector3(h * moveSpeed * Time.deltaTime, 0f, 0f));
             playerMoving = true;
-            lastMove = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
+            lastMove = new Vector2(h, 0f);
         }
-        if (Input.GetAxisRaw("Vertical") > 0f || Input.GetAxisRaw("Vertical") < 0f)
+        if (v > 0f || v < 0f)
         {
-            transform.Translate(new Vector3(0f, Input.GetAxisRaw("Vertical") * moveSpeed * Time.deltaTime, 0f));
+            transform.Translate(new Vector3(0f, v * moveSpeed * Time.deltaTime, 0f));
             playerMoving = true;
-            lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
+            lastMove = new Vector2(0f, v);
         }
 
-        anim.SetFloat("MoveX", Input.GetAxisRaw("Horizontal"));
-        anim.SetFloat("MoveY", Input.GetAxisRaw("Vertical"));
+        anim.SetFloat("MoveX", h);
+        anim.SetFloat("MoveY", v);
         anim.SetBool("isMoving", playerMoving);
         anim.SetFloat("LastMoveX", lastMove.x);
         anim.SetFloat("LastMoveY", lastMove.y);
+        
+        if(v == 1)
+            direction = Vector3.up;
+        else if(v == -1)
+            direction = Vector3.down;
+        else if(h == 1)
+            direction = Vector3.right;
+        else if(h == -1)
+            direction = Vector3.left;
+
     }
+  
 }

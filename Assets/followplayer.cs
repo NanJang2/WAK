@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class followplayer : MonoBehaviour
 {
     public Transform player;
@@ -19,3 +20,4 @@ public class followplayer : MonoBehaviour
         tr.position = new Vector3(player.position.x, player.position.y, -10f);
     }
 }
+
