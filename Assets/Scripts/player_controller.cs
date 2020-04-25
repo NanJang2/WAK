@@ -7,7 +7,7 @@ public class player_controller : MonoBehaviour
 
     public float moveSpeed;
     public bool InputDisabled = false;
-    public DialougeManager dmanager;
+    //public DialougeManager dmanager;
     
     private Animator anim;
     private Vector3 direction;
@@ -16,6 +16,7 @@ public class player_controller : MonoBehaviour
     private bool playerMoving;
     private Vector2 lastMove;
     private GameObject scanObject;
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -30,20 +31,21 @@ public class player_controller : MonoBehaviour
         {
             if (scanObject.tag != "NPC")
             {
-                dmanager.Action(scanObject);
+                DialougeManager.instance.Action(scanObject);
                 
             }
             else if (scanObject.tag == "NPC")
             {
-                if(!dmanager.isAction)
+
+                if(!DialougeManager.instance.isAction)
                 {
                     //대화창이 안 떠 있을 경우
                     //해당 npc의 다이얼로그를 큐에 탑재
                     scanObject.GetComponent<DialougeTrigger>().TriggerDialouge();
                 }
-                else if(dmanager.isAction)
+                else if(DialougeManager.instance.isAction)
                 {
-                    dmanager.DisplayNextSentence();
+                    DialougeManager.instance.DisplayNextSentence();
                 }
             }   
         }
@@ -53,7 +55,7 @@ public class player_controller : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!InputDisabled  && !dmanager.isAction )
+        if (!InputDisabled  && !DialougeManager.instance.isAction )
         {
             Moving();
 

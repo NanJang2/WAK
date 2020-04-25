@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class DialougeManager : MonoBehaviour
 {
+    static public DialougeManager instance;
+
     public GameObject DialoguePanel;
     public Text ChatName;
     public Text ChatText;
@@ -19,16 +22,25 @@ public class DialougeManager : MonoBehaviour
     private string lastsentence;
     private bool ChatAnimPlaying = false;
 
+    private Dialouge dialouge;
+    //DialougeAction action;
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     private void Start()
     {
         sentences = new Queue<string>();
     }
+
     IEnumerator ChatAnim(string narrator, string narration)
     {
         ChatAnimPlaying = true;
         ChatName.text = narrator;
         writerText = "";
-        for(int i = 0; i < narration.Length; i++)
+        for (int i = 0; i < narration.Length; i++)
         {
             writerText += narration[i];
             ChatText.text = writerText;
@@ -36,9 +48,10 @@ public class DialougeManager : MonoBehaviour
         }
         ChatAnimPlaying = false;
     }
+
     public void Action(GameObject scanObj)
     {
-        if(ChatAnimPlaying)
+        if (ChatAnimPlaying)
         {
             StopCoroutine(chatcoroutine);
             if (ChatAnimPlaying)
@@ -47,7 +60,7 @@ public class DialougeManager : MonoBehaviour
         }
         else
         {
-            if(!isAction)
+            if (!isAction)
             {
                 isAction = true;
                 scanObject = scanObj;
@@ -55,42 +68,44 @@ public class DialougeManager : MonoBehaviour
                 lastsentence = scanObject.name + "이다.";
                 StartCoroutine(chatcoroutine);
             }
-            else if(isAction)
+            else if (isAction)
             {
                 isAction = false;
             }
 
             DialoguePanel.SetActive(isAction);
         }
-        
+
 
     }
- 
-  
 
-    public void StartDialouge(Dialouge dialouge)
+
+
+    public void StartDialouge(Dialouge dialouge_temp)
     {
+        dialouge = dialouge_temp;
+        //action = action_temp;
         //큐에 탑재
         //Debug.Log(dialouge.name);
         sentences.Clear();
-        foreach(string sentence in dialouge.sentences)
+
+        foreach (string sentence in dialouge.Sentences)
         {
             sentences.Enqueue(sentence);
         }
-        chattername = dialouge.name;
+        chattername = dialouge.Name;
         DisplayNextSentence();
     }
 
     public void DisplayNextSentence()
     {
-        
         if (!isAction)
         {
             isAction = true;
             DialoguePanel.SetActive(isAction);
         }
-        
-        if(ChatAnimPlaying)
+
+        if (ChatAnimPlaying)
         {
             StopCoroutine(chatcoroutine);
             if (ChatAnimPlaying)
@@ -101,7 +116,8 @@ public class DialougeManager : MonoBehaviour
         {
             if (sentences.Count == 0)
             {
-                EndDialogue();
+
+                EndDialogue(/*dialouge.action*/);
                 return;
             }
             string sentence = sentences.Dequeue();
@@ -109,14 +125,16 @@ public class DialougeManager : MonoBehaviour
             chatcoroutine = ChatAnim(chattername, sentence);
             StartCoroutine(chatcoroutine);
         }
-        
-        
-        
         //Debug.Log(sentence);
     }
-    void EndDialogue()
+    void EndDialogue(/*Action action*/)
     {
-        if(isAction)
+
+        //여기서 씬이 있다면 씬 체인지 (씬이름은 인스펙터에서 바꾸실 수 있습니다. Dialouge하위에 있습니다.)
+        if (dialouge.SceneChange_SceneName != "")
+            SceneManager.LoadScene(dialouge.SceneChange_SceneName);
+
+        if (isAction)
         {
             isAction = false;
         }

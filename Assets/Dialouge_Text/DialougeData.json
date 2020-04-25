@@ -1,0 +1,19 @@
+﻿[
+  {
+    "Name": "멍충이",
+    "Sentences": [ "메인 개발자 입니다.", "안녕하세요" ],
+    "SceneChange_SceneName": "" 
+  },
+
+  {
+    "Name": "뽈롱뽈랑",
+    "Sentences": [ "안뇽하세요", "서브 개발자 입니다.", "서브 개발자 입입입입입입입입입입", "니다" ],
+    "SceneChange_SceneName": ""
+  },
+
+  {
+    "Name": "왁즈",
+    "Sentences": [ "나는 왁즈", "킼키" ],
+    "SceneChange_SceneName": "MiniGame_1"
+  }
+]
