@@ -47,6 +47,12 @@ TagManager:
   - name: BackGround
     uniqueID: 3781091101
     locked: 0
-  - name: Player
+  - name: ForeGround
+    uniqueID: 414954393
+    locked: 0
+  - name: building
+    uniqueID: 3743924239
+    locked: 0
+  - name: Person
     uniqueID: 346529923
     locked: 0
