@@ -10,27 +10,34 @@ public class player_controller : MonoBehaviour
 
 
     private Animator anim;
+    private Rigidbody2D rigid;
 
     bool playerMoving;
     Vector2 lastMove;
     void Start()
     {
         anim = GetComponent<Animator>();
+        rigid = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(!InputDisabled)
+        if (!InputDisabled)
         {
             Moving();
         }
-        
     }
+
+    //private void FixedUpdate()
+    //{
+    //
+    //}
 
     void Moving()
     {
         playerMoving = false;
+
         if (Input.GetAxisRaw("Horizontal") > 0f || Input.GetAxisRaw("Horizontal") < 0f)
         {
             transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * moveSpeed * Time.deltaTime, 0f, 0f));
@@ -43,6 +50,16 @@ public class player_controller : MonoBehaviour
             playerMoving = true;
             lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
         }
+
+        //Vector2 MovePostion = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        //
+        //rigid.MovePosition((Vector2)this.transform.position + (MovePostion * moveSpeed * Time.deltaTime));
+        //
+        //if (MovePostion != Vector2.zero)
+        //{
+        //    playerMoving = true;
+        //    lastMove = MovePostion;
+        //}
 
         anim.SetFloat("MoveX", Input.GetAxisRaw("Horizontal"));
         anim.SetFloat("MoveY", Input.GetAxisRaw("Vertical"));
