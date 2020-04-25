@@ -76,18 +76,24 @@ public class player_controller : MonoBehaviour
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
         playerMoving = false;
+        Vector2 position = rb2d.position;
+
         if (h > 0f || h < 0f)
         {
-            transform.Translate(new Vector3(h * moveSpeed * Time.deltaTime, 0f, 0f));
+            //transform.Translate(new Vector3(h * moveSpeed * Time.deltaTime, 0f, 0f));
+            position.x = position.x + h * moveSpeed * Time.deltaTime;
             playerMoving = true;
             lastMove = new Vector2(h, 0f);
         }
         if (v > 0f || v < 0f)
         {
-            transform.Translate(new Vector3(0f, v * moveSpeed * Time.deltaTime, 0f));
+            //transform.Translate(new Vector3(0f, v * moveSpeed * Time.deltaTime, 0f));
+            position.y = position.y + v * moveSpeed * Time.deltaTime;
             playerMoving = true;
             lastMove = new Vector2(0f, v);
         }
+
+        rb2d.MovePosition(position);
 
         anim.SetFloat("MoveX", h);
         anim.SetFloat("MoveY", v);
