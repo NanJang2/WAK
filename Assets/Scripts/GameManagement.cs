@@ -9,6 +9,14 @@ public class GameManagement : MonoBehaviour
     public player_controller pc;
     private bool ispaused = false;
 
+    void Awake()
+    {
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 30;
+
+        //프레임 고정
+    }
+
     // Start is called before the first frame update
     void Start()
     {
