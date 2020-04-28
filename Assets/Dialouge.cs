@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Dialogue
+public class Dialouge
 {
     public string Name;
     [TextArea(3, 6)]
@@ -12,7 +12,7 @@ public class Dialogue
 
     public string SceneChange_SceneName = "";
     
-    public Dialogue(string name, string[] sentences/*List<string> sentences*/)
+    public Dialouge(string name, string[] sentences/*List<string> sentences*/)
     {
         Name = name;
         Sentences = sentences;
