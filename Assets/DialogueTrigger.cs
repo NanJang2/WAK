@@ -4,11 +4,11 @@ using UnityEngine;
 using LitJson;
 using System.IO;
 
-public class DialougeTrigger : MonoBehaviour
+public class DialogueTrigger : MonoBehaviour
 {
     //public DialougeAction action;
 
-    public Dialouge dialouge;
+    public Dialogue dialogue;
     public int MyNum = 0;
     private void Awake()
     {
@@ -17,21 +17,21 @@ public class DialougeTrigger : MonoBehaviour
 
     public void LoadData()
     {
-        string JsonString = File.ReadAllText(Application.dataPath + "./Dialouge_Text/DialougeData.json");
+        string JsonString = File.ReadAllText(Application.dataPath + "./Dialogue_Text/DialogueData.json");
         
         Debug.Log(JsonString);
 
         JsonData LoadData = JsonMapper.ToObject(JsonString);
 
         //다이알로그 이름
-        dialouge.Name = LoadData[MyNum]["Name"].ToString();
+        dialogue.Name = LoadData[MyNum]["Name"].ToString();
         //다이알로그 사이즈 정하는거
-        dialouge.Sentences = new string[LoadData[MyNum]["Sentences"].Count];
+        dialogue.Sentences = new string[LoadData[MyNum]["Sentences"].Count];
         //다이알로그 대화
         for (int i = 0; i < LoadData[MyNum]["Sentences"].Count; i++)
-            dialouge.Sentences[i] = LoadData[MyNum]["Sentences"][i].ToString();
+            dialogue.Sentences[i] = LoadData[MyNum]["Sentences"][i].ToString();
         //다이알로그 끝났을때 변화
-        dialouge.SceneChange_SceneName = LoadData[MyNum]["SceneChange_SceneName"].ToString();
+        dialogue.SceneChange_SceneName = LoadData[MyNum]["SceneChange_SceneName"].ToString();
 
         Debug.Log(LoadData[MyNum]["Sentences"].Count);
         //dialouge.Name = LoadData[MyNum]["Sentences"].Count;
@@ -42,9 +42,9 @@ public class DialougeTrigger : MonoBehaviour
         //Debug.Log(dialouge.name);
     }
 
-    public void TriggerDialouge()
+    public void TriggerDialogue()
     {
-        DialougeManager.instance.StartDialouge(dialouge);
+        DialogueManager.instance.StartDialogue(dialogue);
         //FindObjectOfType<DialougeManager>().StartDialouge(dialouge);
     }
 }
