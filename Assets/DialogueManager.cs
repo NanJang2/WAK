@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class DialougeManager : MonoBehaviour
+public class DialogueManager : MonoBehaviour
 {
-    static public DialougeManager instance;
+    static public DialogueManager instance;
 
     public GameObject DialoguePanel;
     public Text ChatName;
@@ -22,8 +22,8 @@ public class DialougeManager : MonoBehaviour
     private string lastsentence;
     private bool ChatAnimPlaying = false;
 
-    private Dialouge dialouge;
-    //DialougeAction action;
+    private Dialogue dialogue;
+    //DialogueAction action;
 
     private void Awake()
     {
@@ -81,19 +81,19 @@ public class DialougeManager : MonoBehaviour
 
 
 
-    public void StartDialouge(Dialouge dialouge_temp)
+    public void StartDialogue(Dialogue dialogue_temp)
     {
-        dialouge = dialouge_temp;
+        dialogue = dialogue_temp;
         //action = action_temp;
         //큐에 탑재
-        //Debug.Log(dialouge.name);
+        //Debug.Log(dialogue.name);
         sentences.Clear();
 
-        foreach (string sentence in dialouge.Sentences)
+        foreach (string sentence in dialogue.Sentences)
         {
             sentences.Enqueue(sentence);
         }
-        chattername = dialouge.Name;
+        chattername = dialogue.Name;
         DisplayNextSentence();
     }
 
@@ -117,7 +117,7 @@ public class DialougeManager : MonoBehaviour
             if (sentences.Count == 0)
             {
 
-                EndDialogue(/*dialouge.action*/);
+                EndDialogue(/*dialogue.action*/);
                 return;
             }
             string sentence = sentences.Dequeue();
@@ -130,9 +130,9 @@ public class DialougeManager : MonoBehaviour
     void EndDialogue(/*Action action*/)
     {
 
-        //여기서 씬이 있다면 씬 체인지 (씬이름은 인스펙터에서 바꾸실 수 있습니다. Dialouge하위에 있습니다.)
-        if (dialouge.SceneChange_SceneName != "")
-            SceneManager.LoadScene(dialouge.SceneChange_SceneName);
+        //여기서 씬이 있다면 씬 체인지 (씬이름은 인스펙터에서 바꾸실 수 있습니다. Dialogue하위에 있습니다.)
+        if (dialogue.SceneChange_SceneName != "")
+            SceneManager.LoadScene(dialogue.SceneChange_SceneName);
 
         if (isAction)
         {
